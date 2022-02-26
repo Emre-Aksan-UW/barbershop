@@ -9,15 +9,15 @@ using namespace std;
 
 #define kDefaultNumChairs 3
 
-class Shop_org 
+class Shop
 {
 public:
-   Shop_org(int num_chairs) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), customer_in_chair_(0),
+   Shop(int num_chairs) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), customer_in_chair_(0),
       in_service_(false), money_paid_(false), cust_drops_(0)
    { 
       init(); 
    };
-   Shop_org() : max_waiting_cust_(kDefaultNumChairs), customer_in_chair_(0), in_service_(false),
+   Shop() : max_waiting_cust_(kDefaultNumChairs), customer_in_chair_(0), in_service_(false),
       money_paid_(false), cust_drops_(0)
    { 
       init(); 
@@ -25,8 +25,8 @@ public:
 
    bool visitShop(int id);   // return true only when a customer got a service
    void leaveShop(int id);
-   void helloCustomer();
-   void byeCustomer();
+   void helloCustomer(int id);
+   void byeCustomer(int id);
    int get_cust_drops() const;
 
  private:
@@ -49,6 +49,7 @@ public:
   
    void init();
    string int2string(int i);
-   void print(int person, string message);
+   void printC(int person, string message);
+   void printB(int person, string message);
 };
 #endif
