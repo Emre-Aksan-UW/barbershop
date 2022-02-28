@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
    {
        pthread_join(customer_threads[i], NULL);
    }
-   // Cancel barbers
    for (int i = 0; i < num_barbers; i++) {
        pthread_cancel(barber_threads[i]);
    }

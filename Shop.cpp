@@ -52,9 +52,10 @@ bool Shop::visitShop(int customer_id)
       waiting_chairs_.push(customer_id);
       printC(customer_id, "takes a waiting chair. # waiting seats available = " + int2string(max_waiting_cust_ - waiting_chairs_.size()));
       pthread_cond_wait(&cond_customers_waiting_, &mutex_);
+      chair = findBarber();
       waiting_chairs_.pop();
    }
-   chair = findBarber();
+   //chair = findBarber();
    printC(customer_id, "moves to service chair [" + int2string(chair) + "]. # waiting seats available = " + int2string(max_waiting_cust_ - waiting_chairs_.size()));
    customer_in_chair_[chair] = customer_id;
    in_service_ = true;
