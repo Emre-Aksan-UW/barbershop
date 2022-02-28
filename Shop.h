@@ -5,19 +5,21 @@
 #include <sstream>
 #include <string>
 #include <queue>
+#include <vector>
 using namespace std;
 
 #define kDefaultNumChairs 3
+#define kDefaultnumBarbers 1
 
 class Shop
 {
 public:
-   Shop(int num_chairs) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), customer_in_chair_(0),
+   Shop(int num_chairs, int num_barbers) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), barbers(num_barbers),
       in_service_(false), money_paid_(false), cust_drops_(0)
-   { 
-      init(); 
+   {
+      init();
    };
-   Shop() : max_waiting_cust_(kDefaultNumChairs), customer_in_chair_(0), in_service_(false),
+   Shop() : max_waiting_cust_(kDefaultNumChairs), barbers(kDefaultnumBarbers), in_service_(false),
       money_paid_(false), cust_drops_(0)
    { 
       init(); 
@@ -25,13 +27,16 @@ public:
 
    bool visitShop(int id);   // return true only when a customer got a service
    void leaveShop(int id);
-   void helloCustomer(int id);
-   void byeCustomer(int id);
+   void helloCustomer(int barber_id);
+   void byeCustomer(int barber_id);
    int get_cust_drops() const;
+   int findBarber();
+   int askBarberID(int customerID);
 
  private:
    const int max_waiting_cust_;              // the max number of threads that can wait
-   int customer_in_chair_;
+   const int barbers;                 //number of barbers
+   vector<int> customer_in_chair_ = vector<int>(barbers,0); //vector of barbers chairs, index id of barber, int is customer id. id 0 means empty chair.
    bool in_service_;            
    bool money_paid_;
    queue<int> waiting_chairs_;  // includes the ids of all waiting threads
@@ -45,8 +50,6 @@ public:
    pthread_cond_t  cond_barber_paid_;
    pthread_cond_t  cond_barber_sleeping_;
 
-   static const int barber = 0; // the id of the barber thread
-  
    void init();
    string int2string(int i);
    void printC(int person, string message);

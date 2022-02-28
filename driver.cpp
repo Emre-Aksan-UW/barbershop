@@ -38,10 +38,10 @@ int main(int argc, char *argv[])
    //Many barbers, one shop, many customers
    pthread_t barber_threads[num_barbers];
    pthread_t customer_threads[num_customers];
-   Shop shop(num_chairs);
+   Shop shop(num_chairs, num_barbers);
   
    for (int i = 0; i < num_barbers; i++) {
-      int id = i + 1;
+      int id = i;
       ThreadParam* barber_param = new ThreadParam(&shop, id, service_time);
       pthread_create(&barber_threads[i], NULL, barber, barber_param);
    }
