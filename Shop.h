@@ -14,13 +14,11 @@ using namespace std;
 class Shop
 {
 public:
-   Shop(int num_chairs, int num_barbers) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), barbers(num_barbers),
-      in_service_(false), money_paid_(false), cust_drops_(0)
+   Shop(int num_chairs, int num_barbers) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), barbers(num_barbers), cust_drops_(0)
    {
       init();
    };
-   Shop() : max_waiting_cust_(kDefaultNumChairs), barbers(kDefaultnumBarbers), in_service_(false),
-      money_paid_(false), cust_drops_(0)
+   Shop() : max_waiting_cust_(kDefaultNumChairs), barbers(kDefaultnumBarbers), cust_drops_(0)
    { 
       init(); 
    };
@@ -37,8 +35,8 @@ public:
    const int max_waiting_cust_;              // the max number of threads that can wait
    const int barbers;                 //number of barbers
    vector<int> customer_in_chair_ = vector<int>(barbers,0); //vector of barbers chairs, index id of barber, int is customer id. id 0 means empty chair.
-   bool in_service_;            
-   bool money_paid_;
+   vector<bool> in_service_ = vector<bool>(barbers, false);            
+   vector<bool> money_paid_ = vector<bool>(barbers, false);
    queue<int> waiting_chairs_;  // includes the ids of all waiting threads
    int cust_drops_;
 
@@ -46,9 +44,9 @@ public:
    // mutex_ is used in conjuction with all conditional variables
    pthread_mutex_t mutex_;
    pthread_cond_t  cond_customers_waiting_;
-   pthread_cond_t  cond_customer_served_;
-   pthread_cond_t  cond_barber_paid_;
-   pthread_cond_t  cond_barber_sleeping_;
+   vector <pthread_cond_t>  cond_customer_served_ = vector <pthread_cond_t>(barbers);
+   vector <pthread_cond_t> cond_barber_paid_ = vector <pthread_cond_t>(barbers);
+   vector <pthread_cond_t> cond_barber_sleeping_ = vector <pthread_cond_t>(barbers);
 
    void init();
    string int2string(int i);
