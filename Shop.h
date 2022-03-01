@@ -5,6 +5,13 @@
 #include <sstream>
 #include <string>
 #include <queue>
+// Emre Aksan
+// P4 Synchronization
+// Shop h
+
+//Shop class snychronizes barber and customer threads,
+// has the methods of customer and barber threads.
+
 #include <vector>
 using namespace std;
 

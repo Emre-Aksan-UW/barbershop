@@ -1,3 +1,9 @@
+// Emre Aksan
+// P4 Synchronization
+// Shop cpp
+
+//Implementation of Shop class, snychronizes barber and customer threads.
+// Has the methods of customer and barber threads.
 
 #include "Shop.h"
 
@@ -19,11 +25,12 @@ string Shop::int2string(int i)
    out << i;
    return out.str( );
 }
-
+//Customers print fuction
 void Shop::printC(int person, string message)
 {
    cout << "customer[" << person << "]: " << message << endl;
 }
+//Barbers print fuction
 void Shop::printB(int person, string message) {
    cout << "barber[" << person << "]: " << message << endl;
 }

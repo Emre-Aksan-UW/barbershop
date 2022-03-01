@@ -1,3 +1,9 @@
+// Emre Aksan
+// P4 Synchronization
+// driver cpp
+
+//Creates barber and customer threads, synchronization is done in the Shop class
+
 #include <iostream>
 #include <sys/time.h>
 #include <unistd.h>
@@ -39,13 +45,14 @@ int main(int argc, char *argv[])
    pthread_t barber_threads[num_barbers];
    pthread_t customer_threads[num_customers];
    Shop shop(num_chairs, num_barbers);
-  
+   
+   //barber threads are all initialized. They all go to sleep.
    for (int i = 0; i < num_barbers; i++) {
       int id = i;
       ThreadParam* barber_param = new ThreadParam(&shop, id, service_time);
       pthread_create(&barber_threads[i], NULL, barber, barber_param);
    }
-
+   //One customer thread is initialized every 0-999 time units
    for (int i = 0; i < num_customers; i++) 
    {
       usleep(rand() % 1000);
@@ -67,14 +74,16 @@ int main(int argc, char *argv[])
    return 0;
 }
 
+//Barber Thread
 void *barber(void *arg) 
 {
+   //initialize all values from threadparam
    ThreadParam* barber_param = (ThreadParam*) arg;
    Shop& shop = *barber_param->shop;
    int service_time = barber_param->service_time;
    int id = barber_param->id;
    delete barber_param;
-
+   //Start barbering
    while(true) 
    {
       shop.helloCustomer(id);
@@ -83,14 +92,15 @@ void *barber(void *arg)
    }
    return nullptr;
 }
-
+//Customer thread code
 void *customer(void *arg) 
 {
+   //Initial values gotten from threadparam
    ThreadParam* customer_param = (ThreadParam*)arg;
    Shop& shop = *customer_param->shop;
    int id = customer_param->id;
    delete customer_param;
-
+   //Start being a customer
    if (shop.visitShop(id) == true)
    {
        shop.leaveShop(id);
