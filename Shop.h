@@ -21,7 +21,8 @@ using namespace std;
 class Shop
 {
 public:
-   Shop(int num_chairs, int num_barbers) : max_waiting_cust_((num_chairs > 0 ) ? num_chairs : kDefaultNumChairs), barbers(num_barbers), cust_drops_(0)
+   Shop(int num_chairs, int num_barbers) : max_waiting_cust_((num_chairs > 0 ) ?
+    num_chairs : kDefaultNumChairs), barbers(num_barbers), cust_drops_(0)
    {
       init();
    };
@@ -41,7 +42,7 @@ public:
  private:
    const int max_waiting_cust_;              // the max number of threads that can wait
    const int barbers;                 //number of barbers
-   vector<int> customer_in_chair_ = vector<int>(barbers,0); //vector of barbers chairs, index id of barber, int is customer id. id 0 means empty chair.
+   vector<int> customer_in_chair_ = vector<int>(barbers,0); //vector of barbers chairs, index = barberID
    vector<bool> in_service_ = vector<bool>(barbers, false);            
    vector<bool> money_paid_ = vector<bool>(barbers, false);
    queue<int> waiting_chairs_;  // includes the ids of all waiting threads

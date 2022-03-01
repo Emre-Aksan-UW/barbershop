@@ -56,17 +56,18 @@ bool Shop::visitShop(int customer_id)
    // If someone is being served or transitioning waiting to service chair
    // then take a chair and wait for service
    int chair = findBarber(); //returns -1 if no open chairs
-   //   if (chair  == -1 || !waiting_chairs_.empty()) 
    if (chair  == -1 || !waiting_chairs_.empty()) 
    {
       waiting_chairs_.push(customer_id);
-      printC(customer_id, "takes a waiting chair. # waiting seats available = " + int2string(max_waiting_cust_ - waiting_chairs_.size()));
+      printC(customer_id, "takes a waiting chair. # waiting seats available = " +
+       int2string(max_waiting_cust_ - waiting_chairs_.size()));
       pthread_cond_wait(&cond_customers_waiting_, &mutex_);
       chair = findBarber();
       waiting_chairs_.pop();
    }
-   //chair = findBarber();
-   printC(customer_id, "moves to service chair [" + int2string(chair) + "]. # waiting seats available = " + int2string(max_waiting_cust_ - waiting_chairs_.size()));
+   
+   printC(customer_id, "moves to service chair [" + int2string(chair) +
+    "]. # waiting seats available = " + int2string(max_waiting_cust_ - waiting_chairs_.size()));
    customer_in_chair_[chair] = customer_id;
    in_service_[chair] = true;
 
@@ -112,7 +113,8 @@ void Shop::helloCustomer(int barber_id)
        pthread_cond_wait(&cond_barber_sleeping_[barber_id], &mutex_);
    }
 
-   printB(barber_id, "starts a hair-cut service for [" + int2string( customer_in_chair_[barber_id] ) + "]" );
+   printB(barber_id, "starts a hair-cut service for [" +
+    int2string( customer_in_chair_[barber_id] ) + "]" );
    pthread_mutex_unlock( &mutex_ );
 }
 
@@ -122,7 +124,8 @@ void Shop::byeCustomer(int barber_id)
 
   // Hair Cut-Service is done so signal customer and wait for payment
   in_service_[barber_id] = false;
-  printB(barber_id, "says he's done with a hair-cut service for [" + int2string(customer_in_chair_[barber_id]) + "]");
+  printB(barber_id, "says he's done with a hair-cut service for [" +
+   int2string(customer_in_chair_[barber_id]) + "]");
   money_paid_[barber_id] = false;
   pthread_cond_signal(&cond_customer_served_[barber_id]);
   while (money_paid_[barber_id] == false)
@@ -138,7 +141,8 @@ void Shop::byeCustomer(int barber_id)
   pthread_mutex_unlock( &mutex_ );  // unlock
 }
 
-//customer looks for a barber chair to sit down in. Returns an open chair index or -1 if no open chairs
+//customer looks for a barber chair to sit down in.
+// Returns an open chair index or -1 if no open chairs
 int Shop::findBarber() {
    for (int i = 0; i < barbers; i++) {
       if (customer_in_chair_[i] == 0) {
@@ -147,12 +151,12 @@ int Shop::findBarber() {
    }
    return -1;
 }
-//helper function for customer threads to get their barbers ID who is cutting their hair
+//helper function for customer threads to get their barbers ID
 int Shop::askBarberID(int customerID) {
    for (int i = 0; i < barbers; i++) {
       if (customer_in_chair_[i] == customerID) {
          return i;//return index (barber's id)
       }
    }
-   return -1; //Never gets used unless bug
+   return -1; //Never gets used unless bug happens
 }
